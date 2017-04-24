@@ -1,6 +1,7 @@
 package firebase_demo.fg.com.android_firebase_demo;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static firebase_demo.fg.com.android_firebase_demo.R.id.user;
 
@@ -34,11 +37,37 @@ public class DataListAdapter extends ArrayAdapter {
     }
 
     public void removeUser(String usrId) {
-        for (User usr : userList) {
+
+        ArrayList<User> arrUser =  new ArrayList<>();
+
+        arrUser.addAll(userList);
+
+        userList.clear();
+
+        for(int i=0; i<arrUser.size(); i++)
+        {
+            User user = arrUser.get(i);
+            if(user.getId().equalsIgnoreCase(usrId))
+            {
+                Log.i("===Delete user======","===usrId="+usrId);
+                Log.i("===Delete====","===position==="+i);
+                arrUser.remove(i);
+            }
+
+            if(i == (arrUser.size()-1))
+            {
+                userList.clear();
+                userList.addAll(arrUser);
+            }
+
+        }
+
+
+       /* for (User usr : userList) {
             if (usr.getId().equals(usrId)) {
                 this.userList.remove(usr);
             }
-        }
+        }*/
     }
 
     @Override

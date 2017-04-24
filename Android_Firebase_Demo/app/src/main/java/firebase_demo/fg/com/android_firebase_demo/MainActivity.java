@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +27,39 @@ public class MainActivity extends AppCompatActivity {
         ListView list = (ListView) this.findViewById(R.id.dataList);
         this.listAdapter = new DataListAdapter(this, R.layout.list_view_cell);
         list.setAdapter(listAdapter);
+
+
+        // Add listener
+        mDatabase.addChildEventListener(new FirebaseEventListener(this.listAdapter));
+
+
+
+      /*
+      testing for the connnection
+
+      DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    System.out.println("##################connected###############");
+                } else {
+                    System.out.println("###############not connected###############");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("###############Listener was cancelled###############");
+            }
+        });*/
+
+
+
     }
+/*
 
     @Override
     protected void onStart() {
@@ -33,4 +68,8 @@ public class MainActivity extends AppCompatActivity {
         // Add listener
         mDatabase.addChildEventListener(new FirebaseEventListener(this.listAdapter));
     }
+*/
+
+
+
 }
