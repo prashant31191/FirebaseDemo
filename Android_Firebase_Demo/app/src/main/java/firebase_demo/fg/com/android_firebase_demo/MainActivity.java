@@ -3,6 +3,7 @@ package firebase_demo.fg.com.android_firebase_demo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -11,6 +12,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import firebase_demo.fg.com.android_firebase_demo.storage.StorageMainActivity;
@@ -48,6 +51,18 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        // for the insert
+        btnStorgae.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+            //    writeNewUser("abcd","jay will","jaywill@gmail.com");
+                deleteUser(mDatabase);
+
+                return false;
+            }
+        });
+
+
       /*
       testing for the connnection
 
@@ -83,6 +98,49 @@ public class MainActivity extends AppCompatActivity {
         mDatabase.addChildEventListener(new FirebaseEventListener(this.listAdapter));
     }
 */
+
+    private void writeNewUser(String userId, String name, String email) {
+        User user = new User(name, email);
+
+        // insert
+        // {abcd={name=jay will, id=jaywill@gmail.com}}
+
+        mDatabase.child("users").child(userId).setValue(user);
+    }
+
+
+    private void deleteUser(DatabaseReference postRef) {
+        postRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                User p = mutableData.getValue(User.class);
+                if (p == null) {
+                    return Transaction.success(mutableData);
+                }
+
+             /*   if (p.getId().containsKey("asd")) {
+                    // Unstar the post and remove self from stars
+                    p.starCount = p.starCount - 1;
+                    p.stars.remove(getUid());
+                } else {
+                    // Star the post and add self to stars
+                    p.starCount = p.starCount + 1;
+                    p.stars.put(getUid(), true);
+                }*/
+
+                // Set value and report transaction success
+                mutableData.setValue(p);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d("====delete===", "postTransaction:onComplete:" + databaseError);
+            }
+        });
+    }
 
 
 
