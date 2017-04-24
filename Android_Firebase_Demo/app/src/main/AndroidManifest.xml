@@ -4,6 +4,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
+    <!--for the storage-->
+    <!-- Used only for testing purposes, not required for Firebase Storage -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +22,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity
+            android:name="firebase_demo.fg.com.android_firebase_demo.storage.StorageMainActivity"
+            android:launchMode="singleTask">
+        </activity>
+
+        <service
+            android:name="firebase_demo.fg.com.android_firebase_demo.storage.MyDownloadService"
+            android:exported="false"/>
+
+        <service
+            android:name="firebase_demo.fg.com.android_firebase_demo.storage.MyUploadService"
+            android:exported="false" />
+
     </application>
 
 </manifest>
